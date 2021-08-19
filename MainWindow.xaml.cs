@@ -1,11 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace AsyncImageLoading
@@ -29,40 +27,31 @@ namespace AsyncImageLoading
         }
     }
 
-    public class ViewModel : INotifyPropertyChanged
+    public class ViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        ImageSource _imageSource;
-        public ImageSource ImageSource
+        public ViewModel()
         {
-            get { return this._imageSource; }
-            set
-            {
-                this._imageSource = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("ImageSource"));
-                }
-            }
+            this.ImageSource = new NotifyTaskCompletion<BitmapImage>(this.GetImage());
         }
 
-        public BitmapImage GetImage()
+        public NotifyTaskCompletion<BitmapImage> ImageSource { get; private set; }
+
+        public Task<BitmapImage> GetImage()
         {
             var imgUrl = new Uri("https://miro.medium.com/max/1400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg");
-            var imageData = (new WebClient()).DownloadData(imgUrl);
+            return (new WebClient()).DownloadDataTaskAsync(imgUrl).ContinueWith(
+                (t) =>
+                {
 
+                    var bitmapImage = new BitmapImage { CacheOption = BitmapCacheOption.OnLoad };
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = new MemoryStream(t.Result);
+                    bitmapImage.EndInit();
+                    bitmapImage.Freeze();
 
-            var bitmapImage = new BitmapImage { CacheOption = BitmapCacheOption.OnLoad };
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new MemoryStream(imageData);
-            bitmapImage.EndInit();
-            bitmapImage.Freeze();
-
-            this.ImageSource = bitmapImage;
-           
-
-            return bitmapImage;
+                    return bitmapImage;
+                }
+            );
         }
 
     }

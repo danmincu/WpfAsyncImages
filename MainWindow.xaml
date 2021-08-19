@@ -11,7 +11,7 @@
                Name="img" HorizontalAlignment="Left" 
                VerticalAlignment="Top" Width="166" Height="166"
                SourceUpdated="img_SourceUpdated"
-               Source="{Binding ImageSource}" 
+               Source="{Binding ImageSource.Result}" 
                Stretch="UniformToFill"></Image>
     </Grid>
 </Window>
