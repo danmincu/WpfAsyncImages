@@ -18,7 +18,6 @@ namespace AsyncImageLoading
             InitializeComponent();
             var viewModel = new ViewModel();
             this.DataContext = viewModel;
-            viewModel.GetImage();
         }
 
         private void img_SourceUpdated(object sender, DataTransferEventArgs e)
