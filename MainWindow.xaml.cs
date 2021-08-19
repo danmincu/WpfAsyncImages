@@ -47,13 +47,11 @@ namespace AsyncImageLoading
             }
         }
 
-        public async Task<BitmapImage> GetImage()
+        public BitmapImage GetImage()
         {
             var imgUrl = new Uri("https://miro.medium.com/max/1400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg");
-            var imageData = await (new WebClient()).DownloadDataTaskAsync(imgUrl);
+            var imageData = (new WebClient()).DownloadData(imgUrl);
 
-            // or you can download it Async won't block your UI
-            // var imageData = await new WebClient().DownloadDataTaskAsync(imgUrl);
 
             var bitmapImage = new BitmapImage { CacheOption = BitmapCacheOption.OnLoad };
             bitmapImage.BeginInit();
