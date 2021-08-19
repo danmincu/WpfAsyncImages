@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 namespace AsyncImageLoading
 {
 
+    //https://docs.microsoft.com/en-us/archive/msdn-magazine/2014/march/async-programming-patterns-for-asynchronous-mvvm-applications-data-binding
     public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
     {
         public NotifyTaskCompletion(Task<TResult> task)
@@ -87,4 +88,33 @@ namespace AsyncImageLoading
         }
         public event PropertyChangedEventHandler PropertyChanged;
     }
+
+
+//    one can use the following "skin" to show errors, progress etc
+//<Window x:Class= "MainWindow"
+//        xmlns= "https://schemas.microsoft.com/winfx/2006/xaml/presentation"
+//        xmlns:x= "https://schemas.microsoft.com/winfx/2006/xaml" >
+//  < Window.Resources >
+//    < BooleanToVisibilityConverter x:Key= "BooleanToVisibilityConverter" />
+//  </ Window.Resources >
+//  < Grid >
+//    < !--Busy indicator -->
+//    <Label Content = "Loading..." Visibility= "{Binding UrlByteCount.IsNotCompleted,
+//      Converter={ StaticResource BooleanToVisibilityConverter}
+//}
+//"/>
+//< !--Results-- >
+
+//< Label Content = "{Binding UrlByteCount.Result}" Visibility = "{Binding
+//      UrlByteCount.IsSuccessfullyCompleted,
+//      Converter ={ StaticResource BooleanToVisibilityConverter}}"/>
+//< !--Error details-- >
+
+//< Label Content = "{Binding UrlByteCount.ErrorMessage}" Background = "Red"
+//      Visibility = "{Binding UrlByteCount.IsFaulted,
+//      Converter ={ StaticResource BooleanToVisibilityConverter}}"/>
+//</ Grid >
+//</ Window >
+
+
 }
